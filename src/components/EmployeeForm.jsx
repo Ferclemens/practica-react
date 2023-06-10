@@ -4,13 +4,12 @@ import { Link } from 'react-router-dom'
 
 function EmployeeForm() {
     const {darkMode, setDarkMode} = useThemeContext()
-    const [dataForm,setDataForm] = useState()
     const [data, setData] = useState(
       {
-        nombre : '',
-        apellido: '',
-        posicion : '',
-        salario: 0,
+        name : '',
+        surname: '',
+        position : '',
+        salary: 0,
       }
     )
     const handleChange = (e) => {
@@ -40,11 +39,25 @@ function EmployeeForm() {
   
     function sendForm(e) {
       e.preventDefault()
-      //console.log('formulario enviado');
-      //console.log('Data enviada', data);
-      setDataForm(data)
+      fetch('http://localhost:3000/employees', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+      .then(response => response.json())
+      .then(data => {
+        // Aquí puedes manejar la respuesta del servidor si es necesario
+        console.log(data);
+      })
+      .catch(error => {
+        // Aquí puedes manejar los errores si ocurre alguno
+        console.error(error);
+      });
+      
     }
-    console.log('dataFORM ENVIADO A BACK', dataForm);
+    console.log('data FORM ENVIADO A BACK', data);
   
     const changeTheme = () => {
       setDarkMode(!darkMode)
@@ -60,13 +73,13 @@ function EmployeeForm() {
         <p className='form-description'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
         <form className='form' onSubmit={sendForm}>
           <label className='form-label'>Nombre</label>
-          <input className='form-imput' type='text' value={data.nombre} name='nombre' onChange={handleChange}></input>
+          <input className='form-imput' type='text' value={data.nombre} name='name' onChange={handleChange}></input>
           <label className='form-label'>Apellido</label>
-          <input className='form-imput' type='text' value={data.apellido} name='apellido' onChange={handleChange}></input>
+          <input className='form-imput' type='text' value={data.apellido} name='surname' onChange={handleChange}></input>
           <label className='form-label'>Posición</label>
-          <input className='form-imput' type='text' value={data.posicion} name='posicion' onChange={handleChange}></input>
+          <input className='form-imput' type='text' value={data.posicion} name='position' onChange={handleChange}></input>
           <label className='form-label'>Salario</label>
-          <input className='form-imput' type='number' value={data.salario} name='salario' onChange={handleChange}></input>
+          <input className='form-imput' type='number' value={data.salario} name='salary' onChange={handleChange}></input>
           <button className='form-buttom' type='submit'>Enviar</button>
         </form>
       </section>
